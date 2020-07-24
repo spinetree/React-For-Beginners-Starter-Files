@@ -80,6 +80,20 @@ class App extends React.Component {
     this.setState({ order });
   };
 
+  removeFromOrder = (key) => {
+    const order = { ...this.state.order };
+    delete order[key];
+    // because order is local to the browser and isn't mirrored in firebase we use delete not null.
+    this.setState({ order });
+  };
+
+  deleteFish = (key) => {
+    const fishes = { ...this.state.fishes };
+    // because of firebase, we need to set it to null
+    fishes[key] = null;
+    this.setState({ fishes });
+  };
+
   render() {
     return (
       <div className="catch-of-the-day">
@@ -98,10 +112,16 @@ class App extends React.Component {
             ))}
           </ul>
         </div>
-        <Order fishes={this.state.fishes} order={this.state.order} />
+        <Order
+          fishes={this.state.fishes}
+          order={this.state.order}
+          removeFromOrder={this.removeFromOrder}
+        />
         <Inventory
           addFish={this.addFish}
           updateFish={this.updateFish}
+          deleteFish={this.deleteFish}
+          removeFromOrder={this.removeFromOrder}
           loadSampleFishes={this.loadSampleFishes}
           fishes={this.state.fishes}
         />
